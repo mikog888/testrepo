@@ -1,0 +1,31 @@
+this url contains the data you need to scrape
+url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DA0321EN-SkillsNetwork/labs/datasets/Programming_Languages.html"
+
+!pip install bs4
+from bs4 import BeautifulSoup # this module helps in web scrapping.
+import requests # this module helps us to download a web page
+import pandas as pd
+
+#your code goes here
+data = requests.get(url).text
+
+soup = BeautifulSoup(data,"html.parser")
+
+#your code goes here
+df = pd.DataFrame(columns=['Language Name', 'Average Salary'])
+
+for row in soup.find("tbody").find_all("tr"):
+  col = row.find_all("td")
+  language = col[1].text
+  salary = col[3].text
+
+  df = df.append({'Language Name' : language, 'Average Salary' : salary}, ignore_index=True)
+
+#drop first row
+df.drop(index=df.index[0], axis=0, inplace=True)
+
+print(df)
+
+# your code goes here
+df.to_csv('popular-languages.csv')
+
