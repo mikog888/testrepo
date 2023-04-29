@@ -1,0 +1,60 @@
+Finding duplicates
+In this section you will identify duplicate values in the dataset.
+
+Find how many duplicate rows exist in the dataframe.
+
+
+print(df.duplicated().sum())
+154
+Removing duplicates
+Remove the duplicate rows from the dataframe.
+
+
+df.drop_duplicates(inplace = True)
+Verify if duplicates were actually dropped.
+
+
+print(df.duplicated().value_counts())
+False    11398
+dtype: int64
+
+Finding Missing values
+Find the missing values for all columns.
+
+
+df.columns[df.isnull().any()]
+
+df['WorkLoc'].value_counts()
+
+#make a note of the majority value here, for future reference
+majority = df['WorkLoc'].value_counts().idxmax()
+print(majority)
+
+df['WorkLoc'].fillna('Office', inplace=True)
+
+df['WorkLoc'].fillna('Office', inplace=True)
+
+
+List out the various categories in the column 'CompFreq'
+
+# your code goes here
+df.CompFreq.value_counts().index
+Index(['Yearly', 'Monthly', 'Weekly'], dtype='object')
+Create a new column named 'NormalizedAnnualCompensation'. Use the hint given below if needed.
+
+Double click to see the Hint.
+
+# your code goes here
+anncomp=[]
+def NAC():
+    for x,y in zip(df['CompFreq'], df['CompTotal']):
+        if x=='Monthly':
+            anncomp.append(y*12)
+        elif x=='Weekly':
+            anncomp.append(y*52)
+        else:
+            anncomp.append(y)
+NAC()
+          
+df['NormalizedAnnualCompensation']=anncomp
+df[['NormalizedAnnualCompensation']]
