@@ -1,0 +1,57 @@
+#Import required libraries
+import requests
+
+baseurl = "https://jobs.github.com/positions.json"
+
+def get_number_of_jobs(technology):
+    number_of_jobs = 0
+    #your code goes here
+    payload = {'description':technology,'page':1}           #parameters to search the api
+    while True:                                             #Loop to get the data of multiples pages
+        r = requests.get(baseurl, params=payload)           #Response to be saved
+        if r.ok:                                            #to discard errors
+            data = r.json()                                 #retrieved data to be counted
+            number_of_jobs = number_of_jobs + len(data)     #count of data
+            payload["page"] = payload["page"] + 1           #go to the next page
+        else:
+            break                                           #exit to the loop in case the request is not "ok"
+        if len(data) != 50:
+            break                                           #exit the loop if the data is less than 50 elements, meaning that is the last page.
+    return technology, number_of_jobs
+    
+    print(get_number_of_jobs('python'))
+    
+    Store the results in an excel file
+Call the API for all the given technologies above and write the results in an excel spreadsheet.
+
+If you do not know how create excel file using python, double click here for hints.
+
+Create a python list of all technologies for which you need to find the number of jobs postings.
+
+#your code goes here
+tech=['C','C#','C++','Java','Javascript','Python','Scala','Oracle','SQL Server','MySQL Server','PostgreSQL','MongoDB']
+Import libraries required to create excel spreadsheet
+
+# your code goes here
+import xlsxwriter
+Create a workbook and select the active worksheet
+
+# your code goes here
+workbook = xlsxwriter.Workbook('github_job_postings.xlsx')
+worksheet = workbook.add_worksheet()
+Find the number of jobs postings for each of the technology in the above list. Write the technology name and the number of jobs postings into the excel spreadsheet.
+
+#your code goes here
+row=0
+col=0
+
+for x in tech: 
+    g = get_number_of_jobs(x)
+    worksheet.write(row, col, g[0]) 
+    worksheet.write(row, col + 1, g[1]) 
+    row += 1
+   
+Save into an excel spreadsheet named 'github-job-postings.xlsx'.
+
+#your code goes here
+workbook.close()
